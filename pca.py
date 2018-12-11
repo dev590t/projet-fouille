@@ -1,16 +1,32 @@
 import numpy as np
 
+
+
+'''
+    scaling the dataset
+'''
+def scaling(dataset):
+    print('scaling ...')
+    meanVals = np.mean(dataset, axis=0)
+    meanRemoved = dataset-meanVals
+    var_total = np.var(meanRemoved)
+    var_percent = meanRemoved**2 /var_total
+    return var_percent
+
+
+
 '''
     compute the value and the vector of eig
 '''
 def calcul_eig(train_data):
     print('calcul eig...')
-    meanVals = np.mean(train_data, axis=0)
-    meanRemoved = train_data-meanVals
-    covMat = np.cov(meanRemoved, rowvar=0)
+    var_percent = scaling(train_data)
+    covMat = np.cov(var_percent, rowvar=0)
     eigvals, eigVects = np.linalg.eig(np.mat(covMat))
     return eigvals,eigVects
  
+
+
 '''
     analyse data , and select some feature who have occupe 95% vars
 '''
@@ -32,28 +48,21 @@ def analyse_data( eigvals, eigVects, taux=0.95):
     return count
 
 
+
 '''
     cut some feature , ruduce dimension
 '''
 def cut_feature(train_data, test_data, num, eigvals, eigVects ):
 
     print('cut features ....')
-    meanVals = np.mean(train_data, axis=0)
-    meanVals_test = np.mean(test_data, axis=0)
-    meanRemoved = train_data-meanVals
-    meanRemoved_test = test_data-meanVals_test
+
 
     eigValInd = np.argsort(eigvals)
     eigValInd = eigValInd[:-(num+1):-1]
     redEigVects = eigVects[:, eigValInd]
 
-    low_train = meanRemoved * redEigVects
-    low_test = meanRemoved_test * redEigVects
-
-    pca_train = (low_train * redEigVects.T) + meanVals
-    pca_test = (low_test * redEigVects.T) + meanVals_test
-    #pca_train = train_data * redEigVects
-    #pca_test = test_data * redEigVects
+    pca_train = train_data * redEigVects
+    pca_test = test_data * redEigVects
 
     print('pca train',pca_train.shape,'pca test', pca_test.shape)
     return np.real(pca_train), np.real(pca_test)
