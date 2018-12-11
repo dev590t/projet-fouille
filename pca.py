@@ -72,7 +72,7 @@ def cut_feature(train_data, test_data, num, eigvals, eigVects ):
 def pca_func(train_data,test_data):
 
     eigvals, eigVects = calcul_eig(np.array(train_data).astype(np.float))
-    num = analyse_data( eigvals, eigVects, 0.96)
+    num = analyse_data( eigvals, eigVects, 0.95)
     print('num',num)
     train_pca, test_pca = cut_feature(np.array(train_data).astype(np.float),np.array(test_data).astype(np.float),num, eigvals, eigVects )
     return train_pca, test_pca
