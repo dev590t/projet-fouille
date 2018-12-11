@@ -3,6 +3,7 @@ import random
 import numpy as np
 from pca import pca_func
 from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
 
 '''
     split dataset to 2 part, 70% is for train , and other 30% for test
@@ -70,34 +71,42 @@ def read_data(train_file,test_file):
     return train_data, train_label, test_data, test_label
 
 
-def trainModel(trainData, trainLabel):
+def svmModel(trainData, trainLabel):
     print('Train SVM...')
     svmClf = SVC(C=1.0,kernel='poly',degree=2)
     svmClf.fit(trainData, trainLabel)
     return svmClf
 
+def knnClassify(trainData,trainLabel):
+    print('trainning with knn:')
+    knnClf = KNeighborsClassifier();
+    knnClf.fit(trainData,trainLabel)
+    return knnClf
+
 
 
 
 if __name__ == '__main__':
-
+    trainModel = knnClassify #svmModel
     split_data('dataset.csv','train.csv','test.csv',5555)
     
     train_data, train_label, test_data, test_label = read_data('train.csv','test.csv')
-
+    
     pca_train,pca_test = pca_func(train_data,test_data)
 
     train_pca = pca_train.tolist()
     test_pca = pca_test.tolist()
-    svmClf = trainModel(train_pca,train_label)
+    clf = trainModel(train_pca,train_label)
     print('test data ......')
-    testLabel = svmClf.predict(test_pca)
+    prediction_label = clf.predict(test_pca)
 
-    testLabel = testLabel.tolist()
+    prediction_label = prediction_label.tolist()
+
+    # evaluate the precision
     count = 0
-    for i in range(len(testLabel)):
-        if testLabel[i] == test_label[i]:
+    for i in range(len(prediction_label)):
+        if prediction_label[i] == test_label[i]:
             count += 1
     print(count)
-    print('the right rate is:',float(count)/len(testLabel))
+    print('the right rate is:',float(count)/len(prediction_label))
     
