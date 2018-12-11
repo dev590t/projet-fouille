@@ -31,7 +31,7 @@ def calcul_eig(train_data):
     analyse data , and select some feature who have occupe 95% vars
 '''
 def analyse_data( eigvals, eigVects, taux=0.95):
-    print('analysing data....')
+    print('analysing data...')
     eigValInd = np.argsort(-eigvals)
 
     count = 0
@@ -54,7 +54,7 @@ def analyse_data( eigvals, eigVects, taux=0.95):
 '''
 def cut_feature(train_data, test_data, num, eigvals, eigVects ):
 
-    print('cutting features ....')
+    print('cutting features ...')
 
 
     eigValInd = np.argsort(eigvals)
