@@ -19,7 +19,7 @@ def scaling(dataset):
     compute the value and the vector of eig
 '''
 def calcul_eig(train_data):
-    print('calcul eig...')
+    print('calculing eig...')
     var_percent = scaling(train_data)
     covMat = np.cov(var_percent, rowvar=0)
     eigvals, eigVects = np.linalg.eig(np.mat(covMat))
@@ -31,7 +31,7 @@ def calcul_eig(train_data):
     analyse data , and select some feature who have occupe 95% vars
 '''
 def analyse_data( eigvals, eigVects, taux=0.95):
-    print('analyse data....')
+    print('analysing data....')
     eigValInd = np.argsort(-eigvals)
 
     count = 0
@@ -54,7 +54,7 @@ def analyse_data( eigvals, eigVects, taux=0.95):
 '''
 def cut_feature(train_data, test_data, num, eigvals, eigVects ):
 
-    print('cut features ....')
+    print('cutting features ....')
 
 
     eigValInd = np.argsort(eigvals)
